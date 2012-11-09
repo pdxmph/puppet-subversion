@@ -1,7 +1,7 @@
 # Class: subversion
 #
 # Manage subversion checkouts
-class subversion { 
+class subversion {
 
 	package { "subversion":
 		ensure		=> latest,
@@ -22,11 +22,13 @@ class subversion {
 #   $svnuser (optional) 	- Username to connect with
 #   $password (optional)	- Password to connect with
 #   $revision (optional)	- Revision to check out
-#   $trustcert(optional)	- Use --trust-server-cert
+#   $trustcert (optional)	- Use --trust-server-cert
+#   $noauthcache (optional) - Use --no-auth-cache
+#
 #
 #
 # Sample usage
-#	subversion::checkout { "application/trunk": 
+#	subversion::checkout { "application/trunk":
 #		repopath	=> "/app/trunk",
 #		workingdir	=> "/var/src/app",
 #		host		=> "subversion.local",
@@ -35,7 +37,7 @@ class subversion {
 #		password	=> "kjhsdfkj",
 #		require		=> File["/var/src/app"],
 #	}
-#	
+#
 	define checkout (
 			$repopath,
 			$workingdir,
@@ -45,71 +47,66 @@ class subversion {
 			$svnuser	= false,
 			$revision	= "HEAD",
 			$password	= false,
-			$trustcert	= false
-	) { 
+			$trustcert	= false,
+			$noauthcache = false,
+	) {
 
 
-		
-		$urlmethod = $method ? { 
+
+		$urlmethod = $method ? {
 				false 	=> "",
 				default => "$method://"
 				}
 
-		$optuser = $svnuser ? { 
+		$optuser = $svnuser ? {
 				false	=> "",
 				default	=> "--username $svnuser",
 		}
 
-		$urlhost = $host ? { 
+		$urlhost = $host ? {
 				false	=> "",
 				default	=> "$host"
 		}
 
-		$optpassword = $password ? { 
+		$optpassword = $password ? {
 				false	=> "",
 				default	=> "--password $password"
 		}
 
-		$opttrustcert = $trustcert ? { 
+		$opttrustcert = $trustcert ? {
 				false	=> "",
 				default => "--trust-server-cert"
 		}
 
-
+        $optnoauthcache = $noauthcache ? {
+                false => "",
+                default => "--no-auth-cache"
+        }
 
 
 		$svnurl = "${urlmethod}${urlhost}${repopath}"
 		Exec { path	=> "/bin:/usr/bin:/usr/local/bin" }
-			
 
-		exec { "$svnurl:$workingdir:checkout": 
+
+		exec { "$svnurl:$workingdir:checkout":
 			cwd	=> $workingdir,
-			command	=> "svn checkout $svnflags $optuser $optpassword $opttrustcert -r$revision $svnurl $workingdir",
+			command	=> "svn checkout $svnflags $optnoauthcache $optuser $optpassword $opttrustcert -r$revision $svnurl $workingdir",
 			creates	=> "$workingdir/.svn",
 			require	=> Package["subversion"],
 		}
 
 
-		if ( $ensure == "updated" ) { 
-			exec { "$svnurl:$workingdir:update": 
+		if ( $ensure == "updated" ) {
+			exec { "$svnurl:$workingdir:update":
 				cwd	=> "$workingdir",
-				command => "svn update $svnglags $optuser $optpassword $opttrustcert -r$revision",
+				command => "svn update $svnflags $optnoauthcache $optuser $optpassword $opttrustcert -r$revision",
 				require	=> Package["subversion"],
 			}
-		}	
+		}
 
 
 	}
 
-	
-			
+
+
 }
-
-
-			
-			
-
-		
-			
-			
-		
