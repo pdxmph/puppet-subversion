@@ -4,8 +4,8 @@
 
   ],
   "checksums": {
-    "README.md": "e5875edf25fe827d8f723d00ce8ed3eb",
-    "Modulefile": "f24dddeecd2248ea4a24e578a3ac7c5c",
+    "README.md": "090338f61f123367afa6485283d09f6c",
+    "Modulefile": "a5964fadbf8dd59e8bbfbfbbafa3c522",
     "manifests/init.pp": "9013a8a651d3574bcc71946c3d6d470a"
   },
   "summary": "UNKNOWN",
