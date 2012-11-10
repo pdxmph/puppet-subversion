@@ -11,7 +11,7 @@
   "summary": "UNKNOWN",
   "source": "UNKNOWN",
   "author": "pdxmph",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "project_page": "https://github.com/pdxmph/puppet-subversion",
   "license": "GPLv2",
   "dependencies": [
