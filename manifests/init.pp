@@ -7,7 +7,7 @@ class subversion {
 		ensure		=> latest,
 	}
 
-	$svnflags = "--non-interactive"
+#	$svnflags = "--non-interactive"
 
 # Definition: svn::checkout
 #
@@ -49,6 +49,7 @@ class subversion {
 			$password	= false,
 			$trustcert	= false,
 			$noauthcache = false,
+			$svnflags = "--non-interactive"
 	) {
 
 
